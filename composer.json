@@ -1,0 +1,27 @@
+{
+    "name": "fiuhonors/myhonors2.0-backend",
+    "description": "Backend JSON API for the FIU MyHonors Student Portal",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alastair Paragas",
+            "email": "alastairparagas@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "firebase/php-jwt": "^3.0.0",
+        "ktamas77/firebase-php": "^2.0.0",
+        "league/container": "^1.3",
+        "league/route": "^1.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.7.0",
+        "codegyre/robo": "^0.5.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "MyHonors\\": "MyHonors/"
+        }
+    }
+}
