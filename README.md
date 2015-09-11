@@ -26,6 +26,6 @@ Build Process
 ## Ground rules
 To keep MyHonors-Backend highly scalable, it needs to follow a certain discipline in its development environment. Here are some ground rules to follow:
 
-* Always write your tests before you write your code - Behavior Driven Development!
+* Always write your tests before you write your code - Test-Driven Development!
 * Make sure that tests pass and that you are in sync with the current master branch before making a pull request/merge to the master branch!
 * Follow the PHP Framework Interop Group's [PSR-2 specification](http://www.php-fig.org/psr/psr-2/) coding style (which means that you must also follow the [PSR-1](http://www.php-fig.org/psr/psr-1/) coding style) as well as the [PSR-4 specification](http://www.php-fig.org/psr/psr-4/) autoloading specification for classes, namespaces and directory structure.
