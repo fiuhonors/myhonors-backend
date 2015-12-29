@@ -3,64 +3,88 @@
 namespace MyHonors\Auth;
 
 use \MyHonors\Auth\Contract\AuthFactoryInterface;
-use \MyHonors\Auth\Contract\AuthSpecificInterface;
+use \MyHonors\Auth\Contract\AuthDriverInterface;
 use \MyHonors\Auth\Contract\AuthTokenInterface;
 use \MyHonors\Auth\Exception\NotLoggedInException;
 
 class MyHonorsAuthFactory implements AuthFactoryInterface 
 {
-
+    
+    /**
+    * @var \MyHonors\Auth\Contract\AuthDriverInterface;
+    */
+    private $authDriver;
+    /**
+    * @var \MyHonors\Auth\Contract\AuthTokenInterface
+    */
     private $authToken;
+    /**
+    * @var boolean
+    */
+    private $isLoggedIn;
     
-    private $loggedIn;
     
-    public function __construct(AuthTokenInterface $authToken) 
+    public function __construct(
+        AuthDriverInterface $authDriver, 
+        AuthTokenInterface $authToken)
     {
+        $this->authDriver = $authDriver;
         $this->authToken = $authToken;
-        
-        $this->loggedIn = false;
+        $this->isLoggedIn = false;
     }
     
-    public function loginByCredentials($username, $password, 
-                                       AuthSpecificInterface $userLogin) 
-    {
-
-        if (!$userLogin->login($username, $password)) {
+    public function loginByCredentials($username, $password) 
+    {   
+        if (!$this->authDriver->login($username, $password)) {
             return false;
         }
         
-        $this->authToken->initialize($userLogin->getUser());
+        $this->isLoggedIn = true;
+        $this->authToken->fromUserInformation(
+            $this->authDriver->getUser()
+        );
         
         return true;
     }
     
-    public function loginByToken($sessionToken) 
+    public function loginByToken($authToken) 
     {
-        $this->authToken->initializeManually($sessionToken);
+        $this->authToken->fromAuthToken($authToken);
         
         if (!$this->authToken->isValid()) {
+            $this->authToken->clear();
             return false;
         }
         
+        $this->isLoggedIn = true;
         return true;
+    }
+    
+    public function isLoggedIn()
+    {
+        return $this->isLoggedIn;
     }
     
     public function logout() 
     {
-        if (!$this->loggedIn) {
+        if (!$this->isLoggedIn) {
             throw new NotLoggedInException();
         }
         
+        $this->authDriver->logout();
+        $this->authToken->clear();
+        $this->isLoggedIn = false;
         return true;
     }
-
+    
     public function getToken() 
     {
-        if (!$this->loggedIn) {
+        if (!$this->isLoggedIn) {
             throw new NotLoggedInException();
         }
         
         return $this->authToken;
     }
 
+    
 }

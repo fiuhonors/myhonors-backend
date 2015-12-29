@@ -11,21 +11,32 @@ use \MyHonors\Auth\Exception\InvalidTokenException;
 
 class JsonAuthToken implements AuthTokenInterface 
 {
-
+    
+    
+    /**
+    * @var array Configuration settings for the auth token
+    */
     private $config;
-
+    /**
+    * @var string The actual auth token to be passed between server 
+    *   and client
+    */
     private $token;
+    /**
+    * @var boolean Has the auth token been initialized?
+    */
     private $initialized;
+    
+    
+    private function __construct() {}
 
-    public function __construct(array $config = [])
-    {
-        $this->config = $config;
-
-        $this->initialized = false;
-    }
-
-    public function initialize(UserInterface $userDetails) 
-    {
+    public static function fromUserInformation(
+        JWT $jwt, 
+        array $config, 
+        UserInterface $userDetails
+    ) {
+        $instance = new self();
+        
         $currentTime = time();
 
         $payload = array(
@@ -38,16 +49,28 @@ class JsonAuthToken implements AuthTokenInterface
             "permissions" => $userDetails->getPermissions()
         );
 
-        $this->token = JWT::encode($payload, $this->config['JWT_KEY']);
-        $this->initialized = true;
+        $instance->config = $config;
+        $instance->token = 
+            JWT::encode($payload, $instance->config['JWT_KEY']);
+        $instance->initialized = true;
+        
+        return $this;
     }
-
-    public function initializeManually($authToken)
-    {
-        $this->token = $authToken;
-        $this->initialized = true;
+    
+    public static function fromStringToken(
+        JWT $jwt, 
+        array $config, 
+        $authToken
+    ) {
+        $instance = new self();
+        
+        $instance->config = $config;
+        $instance->token = $authToken;
+        $instance->initialized = true;
+        
+        return $instance;
     }
-
+    
     public function get()
     {
         if ($this->initialized === false) {
@@ -56,7 +79,7 @@ class JsonAuthToken implements AuthTokenInterface
 
         return $this->token;
     }
-
+    
     public function extend($extendDuration)
     {
         if ($this->initialized === false) {
@@ -69,7 +92,7 @@ class JsonAuthToken implements AuthTokenInterface
 
         return $this->token;
     }
-
+    
     public function decode()
     {
         if ($this->initialized === false) {
@@ -86,8 +109,7 @@ class JsonAuthToken implements AuthTokenInterface
 
         return (array) $payload;
     }
-
-
+    
     public function isValid()
     {
         if ($this->initialized === false) {
@@ -104,5 +126,6 @@ class JsonAuthToken implements AuthTokenInterface
 
         return true;
     }
-
+    
+    
 }
