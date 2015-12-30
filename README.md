@@ -6,7 +6,7 @@ MyHonors-Backend tackles all of the server-side needs of the MyHonors platform. 
 
 ## Starting Development
 
-1. Setup the appropriate configuration settings (keys, URLs, etc.) at `.config.js`.
+1. Setup the appropriate configuration settings (keys, URLs, etc.) at `.config.sample.php` and rename it to `.config.php`.
 2. `composer install --dev` to install all of our dependencies - both client AND development modules.
 4. `robo all` to run robo, our PHP task runner that automates PHP linting, executing unit tests, making sure our codebase follows PSR specification and many more.
 
