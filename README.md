@@ -1,6 +1,7 @@
 # MyHonors-Backend 
 
 [![Travis Build System](https://img.shields.io/travis/fiuhonors/myhonors.svg?style=flat-square)](https://travis-ci.org/fiuhonors/myhonors-backend)
+[![VersionEye Dependency Status](https://www.versioneye.com/user/projects/56842a57b214a6000c0004a5/badge.svg?style=flat)](https://www.versioneye.com/user/projects/56842a57b214a6000c0004a5)
 
 MyHonors-Backend tackles all of the server-side needs of the MyHonors platform. From initializing/authorizing sessions, file uploads, sending emails and more, MyHonors-Backend tackles all of these tasks.
 
